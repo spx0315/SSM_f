@@ -5,16 +5,32 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
       <mvc:default-servlet-handler/>   <!--让SpringMVC作为默认的Servlet处理器-->
       <mvc:annotation-driven/>         <!--让SpringMVC使用注解驱动，即可用RequestMap一类的注解-->
-      <context:component-scan base-package="com.spx0315.controller"/>    <!--让SpringMVC的Java文件基础包名-->
+      <context:component-scan base-package="com.spx0315.*"/>    <!--让SpringMVC的Java文件基础包名-->
       <context:annotation-config/>
       <mvc:annotation-driven/>
 
+      <!--静态配置替换-->
+      <context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"/>
+
       <!--配置数据源-->
-      <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-            <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-            <property name="url" value="jdbc:mysql://127.0.0.1:3306/ssm?useUnicode=true&amp;characterEncoding=utf8"/>
-            <property name="username" value="root"/>
-            <property name="password" value="keji0210"/>
+      <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"  destroy-method="close">
+            <property name="driverClassName" value="${jdbc.driverClass}"/>
+            <property name="url" value="${jdbc.url}"/>
+            <property name="username" value="${jdbc.username}"/>
+            <property name="password" value="${jdbc.password}"/>
+      </bean>
+
+      <!--mapper.xml位置-->
+      <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+            <property name="dataSource" ref="dataSource"/>
+            <property name="mapperLocations" value="classpath:/mapper/*Mapper.xml">
+            </property>
+      </bean>
+
+      <!--sqlSessionFactory-->
+      <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+            <property name="basePackage" value="com.spx0315.dao"/>
+            <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
       </bean>
 
 </beans>
