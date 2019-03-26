@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spx0315.dao.IUserDao">
     <!--resultMap 查询的结果集映射-->
-    <resultMap id="userList" type="com.ssm.pojo.User">
+    <resultMap id="userList" type="com.spx0315.pojo.User">
         <!--id:表示主键：
             result ：表示普通的字段
             property：实体类的 属性名
